@@ -16,11 +16,13 @@ exports.serveAssets = function(res, asset, callback) {
   // css, or anything that doesn't change often.)
 
   fs.readFile(asset, 'utf-8', function(err, data) {
-    if (err) {
-      callback(err);
+    if(err) {
+      res.writeHead(404, headers);
+      res.end()
+    } else {
+      res.writeHead(200, headers);
+      res.end(data);
     }
-    callback(null, data)
-
   });
 };
 
