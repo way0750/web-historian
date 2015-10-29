@@ -8,15 +8,32 @@ exports.handleRequest = function (req, res) {
   var pathName = req.url === '/' ? '/index.html' : req.url;
   // archive.paths.siteAssets, pathName
   // if(req.method === 'GET' && req.url === '/'){
-    httpHelper.serveAssets(res, path.join(archive.paths.siteAssets, pathName), function(err, data) {
-      if(err) {
-        res.writeHead(404, httpHelper.headers);
-        res.end()
-      } else {
-        res.writeHead(200, httpHelper.headers);
-        res.end(data);
-      }
+  httpHelper.serveAssets(res, path.join(archive.paths.siteAssets, pathName), function(err, data) {
+    if(err) {
+      res.writeHead(404, httpHelper.headers);
+      res.end()
+    } else {
+      res.writeHead(200, httpHelper.headers);
+      res.end(data);
+    }
+  })
+  if(req.method === 'POST') {
+    var formData = "";
+    req.on('data', function (data) {
+      formData += data;
+      // console.log('-------------->', "a chuck of data: ", data);
     })
+    // console.log('---------------> data is:', formData);
+    req.on('end', function (err, data) {
+      formData = formData.split('=')[1];
+      archive.addUrlToList(formData);
+      res.writeHead(302, httpHelper.headers);
+      res.end()
+    })
+    
+
+
+  }
   // } else if() {
   //   res.writeHead(404, httpHelper.headers);
   //   res.end();

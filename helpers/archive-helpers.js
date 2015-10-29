@@ -50,11 +50,13 @@ exports.addUrlToList = function(url, callBack) {
   // check if file exites
   // if yes then append
   // if no then create new and add
-  fs.appendFile(exports.paths.list, url, function (err) {
+  fs.appendFile(exports.paths.list, url+'\n', function (err) {
     if (err){
       throw err;
     }
-    callBack()
+    if(callBack) {
+      callBack();
+    }
   });
 };
 
