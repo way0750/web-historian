@@ -25,12 +25,11 @@ exports.handleRequest = function (req, res) {
       formData = formData.split('=')[1];
       archive.isUrlInList(formData, function(exists) {
         if(exists) {
-          httpHelper.serveAssets(res, path.join(archive.paths.archivedSites, pathName))
+          httpHelper.serveAssets(res, path.join(archive.paths.archivedSites, formData))
         } else {
           archive.addUrlToList(formData, function() {
             httpHelper.serveAssets(res, path.join(archive.paths.siteAssets, '/loading.html'), 302)
-            // res.writeHead(302, httpHelper.headers);
-            // res.end()
+            archive.downloadUrls([formData]);
           }, res);
         }
       });

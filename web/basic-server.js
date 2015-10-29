@@ -1,7 +1,7 @@
 var http = require("http");
 var handler = require("./request-handler");
 var initialize = require("./initialize.js");
-
+var httpRequest = require('http-request');
 // Why do you think we have this here?
 // HINT: It has to do with what's in .gitignore
 // because archives/site, etc are in gitignore, we have to reinitialize when we start up server, so we are creating archive directory
@@ -19,4 +19,3 @@ if (module.parent) {
   console.log("Listening on http://" + ip + ":" + port);
   console.log('hello world');
 }
-
