@@ -10,7 +10,7 @@ exports.headers = headers = {
   'Content-Type': "text/html"
 };
 
-exports.serveAssets = function(res, asset, callback) {
+exports.serveAssets = function(res, asset, statusCode, callBack) {
   // Write some code here that helps serve up your static files!
   // (Static files are things like html (yours or archived from others...),
   // css, or anything that doesn't change often.)
@@ -20,7 +20,8 @@ exports.serveAssets = function(res, asset, callback) {
       res.writeHead(404, headers);
       res.end()
     } else {
-      res.writeHead(200, headers);
+      statusCode = statusCode || 200;
+      res.writeHead(statusCode, headers);
       res.end(data);
     }
   });

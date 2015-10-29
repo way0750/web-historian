@@ -20,16 +20,22 @@ exports.handleRequest = function (req, res) {
     var formData = "";
     req.on('data', function (data) {
       formData += data;
-    })
+    });
     req.on('end', function (err, data) {
       formData = formData.split('=')[1];
-      archive.addUrlToList(formData, function() {
-        res.writeHead(302, httpHelper.headers);
-        res.end()
-      }, res);
+      archive.isUrlInList(formData, function(exists) {
+        if(exists) {
+          httpHelper.serveAssets(res, path.join(archive.paths.archivedSites, pathName))
+        } else {
+          archive.addUrlToList(formData, function() {
+            httpHelper.serveAssets(res, path.join(archive.paths.siteAssets, '/loading.html'), 302)
+            // res.writeHead(302, httpHelper.headers);
+            // res.end()
+          }, res);
+        }
+      });
     });
   }
-
 };
 
 
