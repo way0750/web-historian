@@ -46,11 +46,27 @@ exports.isUrlInList = function(url, callback) {
   })
 };
 
-exports.addUrlToList = function() {
+exports.addUrlToList = function(url, callBack) {
+  // check if file exites
+  // if yes then append
+  // if no then create new and add
+  fs.appendFile(exports.paths.list, url, function (err) {
+    if (err){
+      throw err;
+    }
+    callBack()
+  });
 };
 
-exports.isUrlArchived = function() {
+exports.isUrlArchived = function(file, callBack) {
+  fs.stat(exports.paths.archivedSites+'/'+file, function (err, stats) {
+    var found = stats ? stats.isFile() : false;
+    callBack(found);
+  })
 };
 
-exports.downloadUrls = function() {
+exports.downloadUrls = function(siteArr) {
+  _.each(siteArr, function (site) {
+    fs.writeFile(exports.paths.archivedSites+'/'+site, site);
+  });
 };
