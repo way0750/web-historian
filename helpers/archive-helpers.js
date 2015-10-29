@@ -47,16 +47,14 @@ exports.isUrlInList = function(url, callback) {
 };
 
 exports.addUrlToList = function(url, callBack) {
-  // check if file exites
+  // check if file exists
   // if yes then append
   // if no then create new and add
   fs.appendFile(exports.paths.list, url+'\n', function (err) {
     if (err){
       throw err;
     }
-    if(callBack) {
-      callBack();
-    }
+    callBack();
   });
 };
 
