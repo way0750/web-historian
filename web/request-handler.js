@@ -2,6 +2,7 @@ var path = require('path');
 var archive = require('../helpers/archive-helpers');
 var httpHelper = require('./http-helpers');
 var urlCheck = archive.isUrlInList;
+var worker = require('../workers/htmlfetcher');
 // require more modules/folders here!
 
 exports.handleRequest = function (req, res) {
@@ -29,12 +30,13 @@ exports.handleRequest = function (req, res) {
         } else {
           archive.addUrlToList(formData, function() {
             httpHelper.serveAssets(res, path.join(archive.paths.siteAssets, '/loading.html'), 302)
-            archive.downloadUrls([formData]);
+            // archive.downloadUrls([formData]);
           }, res);
         }
       });
     });
   }
+  worker.fetcher();
 };
 
 

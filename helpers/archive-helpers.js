@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
 var htmlFetcher = require('../workers/htmlfetcher');
+var httpRequest = require('http-request');
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
  * Consider using the `paths` object below to store frequently used file paths. This way,
@@ -67,9 +68,22 @@ exports.isUrlArchived = function(file, callBack) {
 };
 
 exports.downloadUrls = function(siteArr) {
-  _.each(siteArr, function (site) {
-    fs.writeFile(exports.paths.archivedSites+'/'+site);
-    htmlFetcher.fetcher(site, exports.paths.archivedSites+'/'+site);
-
+  _.each(siteArr, function(site) {
+    exports.isUrlArchived(site, function(archived) {
+      if(!archived) {
+        // fs.writeFile(exports.paths.archivedSites+'/'+site);
+        url = 'http://' + site;
+        httpRequest.get(url, exports.paths.archivedSites+'/'+site, function (err, res) {
+          if (err) {
+            console.log(err);
+            return;
+          }
+        });
+      }
+    });
   });
+  // _.each(siteArr, function (site) {
+  //   fs.writeFile(exports.paths.archivedSites+'/'+site);
+  //   htmlFetcher.fetcher(site, exports.paths.archivedSites+'/'+site);
+  // });
 };
